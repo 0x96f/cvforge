@@ -10,6 +10,7 @@
 	import EducationSection from './sections/EducationSection.svelte';
 	import ProjectsSection from './sections/ProjectsSection.svelte';
 	import CertificatesSection from './sections/CertificatesSection.svelte';
+	import AchievementsSection from './sections/AchievementsSection.svelte';
 	import SkillsSection from './sections/SkillsSection.svelte';
 	import CustomSection from './sections/CustomSection.svelte';
 	import ResumeSettingsSection from './sections/ResumeSettingsSection.svelte';
@@ -194,6 +195,13 @@
 							{config}
 							{update}
 							updateSection={(c) => updateSection('certificates', c)}
+						/>
+					{:else if config.id === 'achievements'}
+						<AchievementsSection
+							achievements={data.achievements}
+							{config}
+							{update}
+							updateSection={(c) => updateSection('achievements', c)}
 						/>
 					{:else if config.id === 'skills'}
 						<SkillsSection

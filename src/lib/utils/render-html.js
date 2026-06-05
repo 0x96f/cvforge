@@ -53,7 +53,7 @@ const META_TEXT_STYLE = 'font-size:0.875em;font-style:italic;opacity:0.8';
 
 const META_LINE_STYLE = `margin:0.25em 0;${META_TEXT_STYLE};display:flex;justify-content:space-between;gap:1em;align-items:baseline`;
 
-/** @param {string} website */
+/** @param {string} [website] */
 function metaLink(website) {
 	const websiteText = (website ?? '').trim();
 	if (!websiteText) return '';
@@ -176,22 +176,33 @@ function renderProjects(data, config, themeColor) {
 	return `<section>${sectionHeading(config.title, themeColor)}<div style="display:flex;flex-direction:column;gap:1em">${articles}</div></section>`;
 }
 
-/** @param {ResumeData} data @param {SectionConfig} config @param {string} themeColor */
-function renderCertificates(data, config, themeColor) {
-	const entries = data.certificates.filter((c) => c.name.trim());
+/** @param {{ name: string, date: string, description: string }[]} entries @param {SectionConfig} config @param {string} themeColor */
+function renderNameDateDescriptionSection(entries, config, themeColor) {
 	if (!entries.length) return '';
 
 	const articles = entries
-		.map((certificate) => {
-			const date = certificate.date.trim()
-				? `<p style="margin:0.25em 0 0;font-size:0.875em;font-style:italic;opacity:0.8">${esc(certificate.date.trim())}</p>`
+		.map((entry) => {
+			const date = entry.date.trim()
+				? `<p style="margin:0.25em 0 0;${META_TEXT_STYLE}">${esc(entry.date.trim())}</p>`
 				: '';
-			const description = descriptionBlock(certificate.description);
-			return `<article><h3 style="margin:0;font-weight:600">${esc(certificate.name.trim())}</h3>${date}${description}</article>`;
+			const description = descriptionBlock(entry.description);
+			return `<article><h3 style="margin:0;font-weight:600">${esc(entry.name.trim())}</h3>${date}${description}</article>`;
 		})
 		.join('');
 
 	return `<section>${sectionHeading(config.title, themeColor)}<div style="display:flex;flex-direction:column;gap:1em">${articles}</div></section>`;
+}
+
+/** @param {ResumeData} data @param {SectionConfig} config @param {string} themeColor */
+function renderCertificates(data, config, themeColor) {
+	const entries = data.certificates.filter((c) => c.name.trim());
+	return renderNameDateDescriptionSection(entries, config, themeColor);
+}
+
+/** @param {ResumeData} data @param {SectionConfig} config @param {string} themeColor */
+function renderAchievements(data, config, themeColor) {
+	const entries = (data.achievements ?? []).filter((a) => a.name.trim());
+	return renderNameDateDescriptionSection(entries, config, themeColor);
 }
 
 /** @param {string} title @param {string} themeColor */
@@ -253,6 +264,7 @@ const RENDERERS = {
 	education: renderEducation,
 	projects: renderProjects,
 	certificates: renderCertificates,
+	achievements: renderAchievements,
 	skills: renderSkills,
 	custom: renderCustom
 };

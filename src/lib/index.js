@@ -10,6 +10,7 @@ export {
 	emptyEducation,
 	emptyProject,
 	emptyCertificate,
+	emptyAchievement,
 	createDefaultResume,
 	mergeResumeData
 } from './utils/defaults.js';

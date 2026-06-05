@@ -25,6 +25,7 @@ export function defaultSections() {
 		{ id: 'education', title: 'Education', visible: true, useBullets: true },
 		{ id: 'projects', title: 'Projects', visible: true, useBullets: false },
 		{ id: 'certificates', title: 'Certificates', visible: true, useBullets: false },
+		{ id: 'achievements', title: 'Achievements', visible: true, useBullets: false },
 		{ id: 'skills', title: 'Skills', visible: true, useBullets: false },
 		{ id: 'custom', title: 'Additional', visible: false, useBullets: true }
 	];
@@ -46,12 +47,27 @@ export function emptyCertificate() {
 	return { id: newId(), name: '', date: '', description: '' };
 }
 
+export function emptyAchievement() {
+	return { id: newId(), name: '', date: '', description: '' };
+}
+
+/** @param {import('./types.js').SectionConfig[] | undefined} parsedSections */
+function mergeSections(parsedSections) {
+	const defaults = defaultSections();
+	if (!parsedSections?.length) return defaults;
+
+	const parsedById = new Map(parsedSections.map((section) => [section.id, section]));
+	return defaults.map((section) => parsedById.get(section.id) ?? section);
+}
+
 /** @param {Partial<ResumeData>} parsed */
 export function mergeResumeData(parsed) {
 	const defaults = createDefaultResume();
 	return {
 		...defaults,
 		...parsed,
+		achievements: parsed.achievements ?? defaults.achievements,
+		sections: mergeSections(parsed.sections),
 		settings: {
 			...defaults.settings,
 			...parsed.settings,
@@ -75,6 +91,7 @@ export function createDefaultResume() {
 		education: [emptyEducation()],
 		projects: [emptyProject()],
 		certificates: [emptyCertificate()],
+		achievements: [emptyAchievement()],
 		skills: {
 			bullets: [''],
 			featured: emptyFeaturedSkills()
