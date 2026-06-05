@@ -1,42 +1,51 @@
 /** @typedef {keyof typeof RESUME_FONTS} FontFamily */
 
-export const RESUME_FONTS = {
+/** @typedef {{ label: string, family: string, file: string, italicFile: string, fallback: string }} ResumeFont */
+
+export const RESUME_FONTS = /** @type {Record<string, ResumeFont>} */ ({
 	inter: {
 		label: 'Inter',
 		family: 'Resume Inter',
-		file: '/fonts/Inter-Regular.woff2',
-		weight: 400,
+		file: '/fonts/Inter-VariableFont_opsz,wght.woff2',
+		italicFile: '/fonts/Inter-Italic-VariableFont_opsz,wght.woff2',
 		fallback: 'Helvetica, Arial, sans-serif'
 	},
 	roboto: {
 		label: 'Roboto',
 		family: 'Resume Roboto',
-		file: '/fonts/Roboto-Regular.woff2',
-		weight: 400,
-		fallback: 'Helvetica, Arial, sans-serif'
-	},
-	lato: {
-		label: 'Lato',
-		family: 'Resume Lato',
-		file: '/fonts/Lato-Regular.woff2',
-		weight: 400,
+		file: '/fonts/Roboto-VariableFont_wdth,wght.woff2',
+		italicFile: '/fonts/Roboto-Italic-VariableFont_wdth,wght.woff2',
 		fallback: 'Helvetica, Arial, sans-serif'
 	},
 	'open-sans': {
 		label: 'Open Sans',
 		family: 'Resume Open Sans',
-		file: '/fonts/OpenSans-Regular.woff2',
-		weight: 400,
+		file: '/fonts/OpenSans-VariableFont_wdth,wght.woff2',
+		italicFile: '/fonts/OpenSans-Italic-VariableFont_wdth,wght.woff2',
 		fallback: 'Helvetica, Arial, sans-serif'
 	},
 	montserrat: {
 		label: 'Montserrat',
 		family: 'Resume Montserrat',
-		file: '/fonts/Montserrat-Regular.woff2',
-		weight: 400,
+		file: '/fonts/Montserrat-VariableFont_wght.woff2',
+		italicFile: '/fonts/Montserrat-Italic-VariableFont_wght.woff2',
+		fallback: 'Helvetica, Arial, sans-serif'
+	},
+	geist: {
+		label: 'Geist',
+		family: 'Resume Geist',
+		file: '/fonts/Geist-VariableFont_wght.woff2',
+		italicFile: '/fonts/Geist-Italic-VariableFont_wght.woff2',
+		fallback: 'Helvetica, Arial, sans-serif'
+	},
+	'work-sans': {
+		label: 'Work Sans',
+		family: 'Resume Work Sans',
+		file: '/fonts/WorkSans-VariableFont_wght.woff2',
+		italicFile: '/fonts/WorkSans-Italic-VariableFont_wght.woff2',
 		fallback: 'Helvetica, Arial, sans-serif'
 	}
-};
+});
 
 export const FONT_FAMILY_IDS = /** @type {FontFamily[]} */ (Object.keys(RESUME_FONTS));
 
@@ -60,9 +69,29 @@ function fontFormat(file) {
 	return 'opentype';
 }
 
+/** @param {ResumeFont} font @param {string} src @param {'normal' | 'italic'} style */
+function singleFontFaceRule(font, src, style) {
+	const file = style === 'italic' ? font.italicFile : font.file;
+	const format = fontFormat(file);
+	return `@font-face{font-family:"${font.family}";src:url("${src}") format("${format}");font-weight:100 900;font-style:${style};font-display:swap;}`;
+}
+
+/** @param {FontFamily} id @param {(file: string) => string} srcFor */
+export function fontFaceRules(id, srcFor) {
+	const font = RESUME_FONTS[id];
+	return [
+		singleFontFaceRule(font, srcFor(font.file), 'normal'),
+		singleFontFaceRule(font, srcFor(font.italicFile), 'italic')
+	].join('');
+}
+
 /** @param {FontFamily} id @param {string} src */
 export function fontFaceRule(id, src) {
+	return fontFaceRules(id, () => src);
+}
+
+/** @param {FontFamily} id */
+export function resumeFontFiles(id) {
 	const font = RESUME_FONTS[id];
-	const format = fontFormat(font.file);
-	return `@font-face{font-family:"${font.family}";src:url("${src}") format("${format}");font-weight:${font.weight};font-style:normal;font-display:swap;}`;
+	return [font.file, font.italicFile];
 }

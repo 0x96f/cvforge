@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
-import { fontFaceRule, RESUME_FONTS } from './fonts.js';
+import { fontFaceRules, resumeFontFiles } from './fonts.js';
 import { renderResumeArticle } from './render-html.js';
 import { PAGE_GOTENBERG, PAGE_PADDING } from './styles.js';
 
@@ -11,8 +11,7 @@ const DEFAULT_GOTENBERG_URL = 'http://gotenberg:3000';
 
 /** @param {FontFamily} id */
 function resumeFontFace(id) {
-	const filename = RESUME_FONTS[id].file.replace(/^\/fonts\//, '');
-	return fontFaceRule(id, filename);
+	return fontFaceRules(id, (file) => file.replace(/^\/fonts\//, ''));
 }
 
 /** @param {ResumeData} data */
@@ -45,13 +44,12 @@ function resumeToHtml(data) {
 </html>`;
 }
 
-/** @param {FontFamily} id */
-function readResumeFont(id) {
-	const font = RESUME_FONTS[id];
-	const filename = font.file.replace(/^\/fonts\//, '');
+/** @param {string} file */
+function readFontFile(file) {
+	const filename = file.replace(/^\/fonts\//, '');
 	const candidates = [
 		path.join(process.cwd(), 'static', 'fonts', filename),
-		path.join(process.cwd(), 'static', font.file.slice(1))
+		path.join(process.cwd(), 'static', file.slice(1))
 	];
 
 	for (const filePath of candidates) {
@@ -65,18 +63,25 @@ function readResumeFont(id) {
 	);
 }
 
+/** @param {FontFamily} id */
+function readResumeFonts(id) {
+	return resumeFontFiles(id).map(readFontFile);
+}
+
 /** @param {ResumeData} data */
 export async function resumeToPdf(data) {
 	const gotenbergUrl = process.env.GOTENBERG_URL ?? DEFAULT_GOTENBERG_URL;
 	const endpoint = `${gotenbergUrl.replace(/\/$/, '')}/forms/chromium/convert/html`;
 
 	const html = resumeToHtml(data);
-	const { bytes: fontBytes, filename: fontFilename } = readResumeFont(data.settings.fontFamily);
+	const fontFiles = readResumeFonts(data.settings.fontFamily);
 	const { paperWidth, paperHeight } = PAGE_GOTENBERG[data.settings.pageSize];
 
 	const form = new FormData();
 	form.append('files', new Blob([html], { type: 'text/html' }), 'index.html');
-	form.append('files', new Blob([new Uint8Array(fontBytes)], { type: 'font/woff2' }), fontFilename);
+	for (const { bytes, filename } of fontFiles) {
+		form.append('files', new Blob([new Uint8Array(bytes)], { type: 'font/woff2' }), filename);
+	}
 	form.append('paperWidth', paperWidth);
 	form.append('paperHeight', paperHeight);
 	form.append('marginTop', PAGE_PADDING);

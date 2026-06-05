@@ -18,7 +18,9 @@ export {
 	FONT_FAMILY_IDS,
 	normalizeFontFamily,
 	fontFamilyStack,
-	fontFaceRule
+	fontFaceRule,
+	fontFaceRules,
+	resumeFontFiles
 } from './utils/fonts.js';
 
 export { PAGE_GOTENBERG, PAGE_PADDING, PAGE_WIDTH, PAGE_HEIGHT } from './utils/styles.js';
