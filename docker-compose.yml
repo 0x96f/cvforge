@@ -1,0 +1,23 @@
+services:
+  app:
+    build: .
+    ports:
+      - '3000:3000'
+    environment:
+      GOTENBERG_URL: http://gotenberg:3000
+    depends_on:
+      gotenberg:
+        condition: service_started
+    networks:
+      - cvforge
+
+  gotenberg:
+    image: gotenberg/gotenberg:8
+    ports:
+      - '3001:3000'
+    networks:
+      - cvforge
+
+networks:
+  cvforge:
+    driver: bridge
