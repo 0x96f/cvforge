@@ -34,6 +34,16 @@
 								})}
 						/>
 					</Field>
+					<Field label="Link">
+						<TextInput
+							value={project.website ?? ''}
+							onchange={(website) =>
+								update({
+									projects: projects.map((p) => (p.id === project.id ? { ...p, website } : p))
+								})}
+							placeholder="https://"
+						/>
+					</Field>
 					<Field label="Date">
 						<TextInput
 							value={project.date}

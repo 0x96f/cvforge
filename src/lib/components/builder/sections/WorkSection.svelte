@@ -44,13 +44,23 @@
 							placeholder="Jan 2022 – Present"
 						/>
 					</Field>
-					<Field label="Job title" class="sm:col-span-2">
+					<Field label="Job title">
 						<TextInput
 							value={job.title}
 							onchange={(title) =>
 								update({
 									work: work.map((w) => (w.id === job.id ? { ...w, title } : w))
 								})}
+						/>
+					</Field>
+					<Field label="Company website">
+						<TextInput
+							value={job.website ?? ''}
+							onchange={(website) =>
+								update({
+									work: work.map((w) => (w.id === job.id ? { ...w, website } : w))
+								})}
+							placeholder="https://"
 						/>
 					</Field>
 				</div>

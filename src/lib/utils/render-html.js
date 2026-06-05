@@ -41,6 +41,51 @@ function esc(text) {
 		.replace(/"/g, '&quot;');
 }
 
+/** @param {string} url */
+function formatHref(url) {
+	const trimmed = url.trim();
+	if (!trimmed) return '';
+	if (/^https?:\/\//i.test(trimmed)) return trimmed;
+	return `https://${trimmed}`;
+}
+
+const META_TEXT_STYLE = 'font-size:0.875em;font-style:italic;opacity:0.8';
+
+const META_LINE_STYLE = `margin:0.25em 0;${META_TEXT_STYLE};display:flex;justify-content:space-between;gap:1em;align-items:baseline`;
+
+/** @param {string} website */
+function metaLink(website) {
+	const websiteText = (website ?? '').trim();
+	if (!websiteText) return '';
+
+	return `<a href="${esc(formatHref(websiteText))}" style="color:inherit;text-decoration:none">${esc(websiteText)}</a>`;
+}
+
+/** @param {string} date @param {string} [website] */
+function workMetaLine(date, website) {
+	const dateText = date.trim();
+	const link = metaLink(website);
+	if (!dateText && !link) return '';
+
+	const left = dateText ? `<span>${esc(dateText)}</span>` : '<span></span>';
+	const right = link ? `<span style="flex-shrink:0">${link}</span>` : '';
+
+	return `<p style="${META_LINE_STYLE}">${left}${right}</p>`;
+}
+
+/** @param {string} name @param {string} [website] */
+function projectHeader(name, website) {
+	const nameText = name.trim();
+	if (!nameText) return '';
+
+	const link = metaLink(website);
+	if (!link) {
+		return `<h3 style="margin:0;font-weight:600">${esc(nameText)}</h3>`;
+	}
+
+	return `<h3 style="margin:0;font-weight:600;display:flex;justify-content:space-between;gap:1em;align-items:baseline"><span>${esc(nameText)}</span><span style="flex-shrink:0;${META_TEXT_STYLE};font-weight:400">${link}</span></h3>`;
+}
+
 /** @param {string[] | undefined} lines @param {boolean} useBullets */
 function bulletItems(lines, useBullets) {
 	const items = flattenLines(lines);
@@ -72,12 +117,10 @@ function renderWork(data, config, themeColor) {
 				.filter((s) => s.trim())
 				.map(esc)
 				.join(' - ');
-			const date = job.date.trim()
-				? `<p style="margin:0.25em 0;font-size:0.875em;font-style:italic;opacity:0.8">${esc(job.date.trim())}</p>`
-				: '';
+			const meta = workMetaLine(job.date, job.website);
 			const bullets = bulletItems(job.bullets, config.useBullets);
 			const bulletsBlock = bullets ? `<div style="margin-top:0.25em">${bullets}</div>` : '';
-			return `<article><h3 style="margin:0;font-weight:600">${header}</h3>${date}${bulletsBlock}</article>`;
+			return `<article><h3 style="margin:0;font-weight:600">${header}</h3>${meta}${bulletsBlock}</article>`;
 		})
 		.join('');
 
@@ -121,11 +164,12 @@ function renderProjects(data, config, themeColor) {
 
 	const articles = entries
 		.map((project) => {
+			const header = projectHeader(project.name, project.website);
 			const date = project.date.trim()
-				? `<p style="margin:0.25em 0 0;font-size:0.875em;font-style:italic;opacity:0.8">${esc(project.date.trim())}</p>`
+				? `<p style="margin:0.25em 0 0;${META_TEXT_STYLE}">${esc(project.date.trim())}</p>`
 				: '';
 			const description = descriptionBlock(project.description);
-			return `<article><h3 style="margin:0;font-weight:600">${esc(project.name.trim())}</h3>${date}${description}</article>`;
+			return `<article>${header}${date}${description}</article>`;
 		})
 		.join('');
 

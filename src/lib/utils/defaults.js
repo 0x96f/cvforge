@@ -31,7 +31,7 @@ export function defaultSections() {
 }
 
 export function emptyWork() {
-	return { id: newId(), company: '', title: '', date: '', bullets: [''] };
+	return { id: newId(), company: '', website: '', title: '', date: '', bullets: [''] };
 }
 
 export function emptyEducation() {
@@ -39,7 +39,7 @@ export function emptyEducation() {
 }
 
 export function emptyProject() {
-	return { id: newId(), name: '', date: '', description: '' };
+	return { id: newId(), name: '', website: '', date: '', description: '' };
 }
 
 export function emptyCertificate() {

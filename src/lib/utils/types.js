@@ -14,6 +14,7 @@
  * @typedef {Object} WorkEntry
  * @property {string} id
  * @property {string} company
+ * @property {string} website
  * @property {string} title
  * @property {string} date
  * @property {string[]} bullets
@@ -29,6 +30,7 @@
  * @typedef {Object} ProjectEntry
  * @property {string} id
  * @property {string} name
+ * @property {string} website
  * @property {string} date
  * @property {string} description
  *
