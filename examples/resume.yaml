@@ -1,0 +1,119 @@
+profile:
+  name: Jordan Chen
+  objective: Product designer focused on research-led workflows for complex B2B tools. I translate messy user problems into calm interfaces, design systems, and prototypes teams can ship. I work best when engineering, product, and support share the same picture of the customer.
+  email: jordan.chen@example.com
+  phone: '+1 (503) 555-0198'
+  website: https://example.com
+  location: Portland, OR
+work:
+  - id: b2000002-0000-4000-8000-000000000001
+    company: Harbor Studio
+    website: https://harbor-studio.example.com
+    title: Lead Product Designer
+    date: Jan 2021 – Present
+    bullets:
+      - Redesigned onboarding for a warehouse ops platform, raising task completion from 61% to 89%
+      - Built and maintained a Figma design system adopted by 14 engineers across two product lines
+      - Ran quarterly usability studies with floor managers and incorporated findings into roadmap planning
+  - id: b2000002-0000-4000-8000-000000000002
+    company: Lumen Apps
+    website: https://lumen-apps.example.com
+    title: UX Designer
+    date: Aug 2018 – Dec 2020
+    bullets:
+      - Shipped mobile-first dashboards for a field-service product used by 2,400 technicians
+      - Created wireframes and clickable prototypes that shortened approval cycles with enterprise clients
+      - Facilitated design critiques and paired with frontend developers on accessibility fixes
+education:
+  - id: b2000002-0000-4000-8000-000000000003
+    school: Rhode Island School of Design
+    date: '2014 – 2018'
+    degree: B.F.A. Industrial Design
+    gpa: ''
+    bullets:
+      - Minor in Human-Computer Interaction
+projects:
+  - id: b2000002-0000-4000-8000-000000000004
+    name: Field Notes Kit
+    website: https://github.com/example/field-notes-kit
+    date: '2025'
+    description: Notion-style template pack for documenting contextual inquiry sessions and affinity mapping.
+  - id: b2000002-0000-4000-8000-000000000005
+    name: Transit Board
+    website: https://transit-board.example.com
+    date: '2022'
+    description: Community project mapping accessible bus stops with crowdsourced photos and audit checklists.
+certificates:
+  - id: b2000002-0000-4000-8000-000000000006
+    name: Nielsen Norman Group UX Certification
+    date: '2020'
+    description: ''
+achievements:
+  - id: b2000002-0000-4000-8000-000000000007
+    name: Design mentorship program lead
+    date: '2024'
+    description: Coached four junior designers through their first end-to-end feature launches.
+  - id: b2000002-0000-4000-8000-000000000008
+    name: Conference speaker
+    date: '2023'
+    description: Presented "Designing for Shift Workers" at a regional product meetup.
+skills:
+  bullets:
+    - Figma, FigJam, prototyping, user interviews, usability testing, design systems, WCAG basics, HTML/CSS
+  featured:
+    - name: UX research
+      rating: 5
+    - name: Prototyping
+      rating: 5
+    - name: Design systems
+      rating: 4
+    - name: Facilitation
+      rating: 4
+    - name: Visual design
+      rating: 4
+    - name: Accessibility
+      rating: 3
+custom:
+  bullets:
+    - 'Languages: English (native), Mandarin (conversational)'
+sections:
+  - id: work
+    title: Work Experience
+    visible: true
+    useBullets: true
+  - id: education
+    title: Education
+    visible: true
+    useBullets: true
+  - id: projects
+    title: Projects
+    visible: true
+    useBullets: false
+  - id: certificates
+    title: Certificates
+    visible: true
+    useBullets: false
+  - id: achievements
+    title: Achievements
+    visible: true
+    useBullets: false
+  - id: skills
+    title: Skills
+    visible: true
+    useBullets: false
+  - id: custom
+    title: Additional
+    visible: true
+    useBullets: false
+settings:
+  themeColor: '#6d28d9'
+  fontFamily: open-sans
+  fontSize: 10
+  pageSize: a4
+  sectionOrder:
+    - work
+    - projects
+    - achievements
+    - skills
+    - education
+    - custom

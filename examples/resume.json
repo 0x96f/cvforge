@@ -1,0 +1,140 @@
+{
+	"profile": {
+		"name": "Alex Rivera",
+		"objective": "Backend engineer with six years of experience building reliable APIs and data pipelines. I care about clear system design, observability, and mentoring junior developers. Looking for a team where thoughtful engineering and steady delivery matter more than hype.",
+		"email": "alex.rivera@example.com",
+		"phone": "+1 (512) 555-0142",
+		"website": "https://example.dev",
+		"location": "Austin, TX"
+	},
+	"work": [
+		{
+			"id": "a1000001-0000-4000-8000-000000000001",
+			"company": "Northwind Analytics",
+			"website": "https://northwind-analytics.example.com",
+			"title": "Senior Backend Engineer",
+			"date": "Mar 2022 – Present",
+			"bullets": [
+				"Led migration of billing service from a monolith to event-driven microservices, cutting payout failures by 38%",
+				"Designed PostgreSQL schemas and caching strategy that reduced median API latency from 420ms to 95ms",
+				"Introduced OpenTelemetry tracing and SLO dashboards used by three product squads"
+			]
+		},
+		{
+			"id": "a1000001-0000-4000-8000-000000000002",
+			"company": "Beacon Health",
+			"website": "https://beacon-health.example.com",
+			"title": "Software Engineer",
+			"date": "Jun 2019 – Feb 2022",
+			"bullets": [
+				"Built HIPAA-compliant patient intake APIs in Go and deployed them on Kubernetes",
+				"Owned on-call rotation for scheduling services with 99.95% uptime over 18 months",
+				"Partnered with security team to roll out OAuth2 and scoped service accounts"
+			]
+		}
+	],
+	"education": [
+		{
+			"id": "a1000001-0000-4000-8000-000000000003",
+			"school": "University of Texas at Austin",
+			"date": "2015 – 2019",
+			"degree": "B.S. Computer Science",
+			"gpa": "3.7",
+			"bullets": []
+		}
+	],
+	"projects": [
+		{
+			"id": "a1000001-0000-4000-8000-000000000004",
+			"name": "LedgerLite",
+			"website": "https://github.com/example/ledgerlite",
+			"date": "2024",
+			"description": "Open-source double-entry bookkeeping CLI with CSV import and plain-text reports."
+		},
+		{
+			"id": "a1000001-0000-4000-8000-000000000005",
+			"name": "QueueSmith",
+			"website": "https://github.com/example/queuesmith",
+			"date": "2023",
+			"description": "Toy job-queue simulator used in a conference talk on backpressure and retry policies."
+		}
+	],
+	"certificates": [
+		{
+			"id": "a1000001-0000-4000-8000-000000000006",
+			"name": "AWS Certified Solutions Architect – Associate",
+			"date": "2023",
+			"description": ""
+		}
+	],
+	"achievements": [
+		{
+			"id": "a1000001-0000-4000-8000-000000000007",
+			"name": "Internal hackathon winner",
+			"date": "2024",
+			"description": "Shipped a prototype fraud-detection rules engine adopted by the payments team."
+		}
+	],
+	"skills": {
+		"bullets": [
+			"Go, Python, PostgreSQL, Redis, Kafka, gRPC, Docker, Kubernetes, Terraform, Grafana"
+		],
+		"featured": [
+			{ "name": "Go", "rating": 5 },
+			{ "name": "PostgreSQL", "rating": 4 },
+			{ "name": "Kubernetes", "rating": 4 },
+			{ "name": "Python", "rating": 3 },
+			{ "name": "AWS", "rating": 4 },
+			{ "name": "System design", "rating": 4 }
+		]
+	},
+	"custom": {
+		"bullets": [""]
+	},
+	"sections": [
+		{
+			"id": "work",
+			"title": "Work Experience",
+			"visible": true,
+			"useBullets": true
+		},
+		{
+			"id": "education",
+			"title": "Education",
+			"visible": true,
+			"useBullets": false
+		},
+		{
+			"id": "projects",
+			"title": "Projects",
+			"visible": true,
+			"useBullets": false
+		},
+		{
+			"id": "certificates",
+			"title": "Certificates",
+			"visible": true,
+			"useBullets": false
+		},
+		{
+			"id": "achievements",
+			"title": "Achievements",
+			"visible": true,
+			"useBullets": false
+		},
+		{ "id": "skills", "title": "Skills", "visible": true, "useBullets": false },
+		{
+			"id": "custom",
+			"title": "Additional",
+			"visible": true,
+			"useBullets": true
+		}
+	],
+	"settings": {
+		"themeColor": "#0f766e",
+		"fontFamily": "geist",
+		"fontSize": 11,
+		"pageSize": "letter",
+		"sectionOrder": ["work", "education", "skills", "projects", "certificates"]
+	}
+}
