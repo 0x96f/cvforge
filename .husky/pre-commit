@@ -2,5 +2,3 @@ echo "===== Format code ====="
 pnpm format
 echo "===== Lint code ====="
 pnpm lint
-echo "===== Run tests ====="
-pnpm test

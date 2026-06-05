@@ -6,7 +6,7 @@ Privacy-focused, open-source resume builder. Create a resume in your browser, pr
 
 - **Guided editor** - Profile, work history, education, projects, certificates, and skills with live preview
 - **Privacy & encryption** - Resume data encrypted in browser local storage
-- **Export formats** - JSON (client-side) and PDF (via self-hosted Gotenberg)
+- **Export formats** - PDF (Gotenberg), JSON, and YAML from the Save as menu; import JSON or YAML on create
 - **Open source** - MIT-licensed
 
 ## Tech stack
@@ -36,7 +36,7 @@ Open [http://localhost:3000](http://localhost:3000). Gotenberg is available insi
 
 ### Local development (without Gotenberg)
 
-Use this for UI work, the editor, live preview, and JSON export. **PDF export requires Gotenberg** and will not work in this mode.
+Use this for UI work, the editor, live preview, and JSON/YAML export. **PDF export requires Gotenberg** and will not work in this mode.
 
 ```bash
 pnpm install
@@ -91,13 +91,13 @@ src/routes/
 src/lib/components/
   ui/                        Shared form controls
   builder/                   Editor, preview, and section forms
-src/lib/utils/               Data model, storage, encryption, export
+src/lib/utils/               Data model, storage, encryption, PDF/JSON/YAML export
 static/fonts/                Resume font files (woff2)
 ```
 
 ## Inspired by
 
-[OpenResume](https://github.com/xitanggg/open-resume) — an open-source resume builder and parser.
+[OpenResume](https://github.com/xitanggg/open-resume) - an open-source resume builder and parser.
 
 ## License
 

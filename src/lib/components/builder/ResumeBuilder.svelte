@@ -21,15 +21,18 @@
 		exportResumePdf,
 		loadResume,
 		saveResume,
+		serializeResumeJson,
+		serializeResumeYaml,
 		slugifyName
 	} from '$lib';
 	import Button from '../ui/Button.svelte';
+	import SaveAsMenu from '../ui/SaveAsMenu.svelte';
 
 	let { initialFresh = false } = $props();
 
 	/** @type {ResumeData | null} */
 	let data = $state(null);
-	let exporting = $state(/** @type {string | null} */ (null));
+	let exporting = $state(/** @type {'json' | 'yaml' | 'pdf' | null} */ (null));
 	let saveHint = $state(false);
 
 	$effect(() => {
@@ -92,14 +95,22 @@
 		};
 	}
 
-	function exportJson() {
+	/** @param {'json' | 'yaml' | 'pdf'} format */
+	async function handleExport(format) {
 		if (!data) return;
-		const filename = slugifyName(data.profile.name);
-		downloadText(JSON.stringify(data, null, 2), `${filename}.json`, 'application/json');
-	}
 
-	async function exportPdf() {
-		if (!data) return;
+		if (format === 'json') {
+			const filename = slugifyName(data.profile.name);
+			downloadText(serializeResumeJson(data), `${filename}.json`, 'application/json');
+			return;
+		}
+
+		if (format === 'yaml') {
+			const filename = slugifyName(data.profile.name);
+			downloadText(serializeResumeYaml(data), `${filename}.yaml`, 'application/x-yaml');
+			return;
+		}
+
 		exporting = 'pdf';
 		try {
 			const result = await exportResumePdf(data);
@@ -131,23 +142,12 @@
 	<div class="min-h-screen bg-zinc-50">
 		<header class="sticky top-0 z-10 border-b border-zinc-200 bg-white/90 backdrop-blur">
 			<div class="flex w-full flex-wrap items-center justify-between gap-4 px-8 py-3 lg:px-6">
-				<Button label="Back" variant="outline" href="/" />
+				<Button label="Back" variant="primary" href="/" />
 				<div class="flex flex-wrap items-center gap-2">
 					{#if saveHint}
 						<span class="mr-3 text-xs font-bold text-emerald-600">Saved</span>
 					{/if}
-					<Button
-						label="Save as JSON"
-						onClick={exportJson}
-						disabled={!!exporting}
-						variant="outline"
-					/>
-					<Button
-						label="Save as PDF"
-						onClick={exportPdf}
-						disabled={!!exporting}
-						variant="secondary"
-					/>
+					<SaveAsMenu disabled={!data} {exporting} onExport={handleExport} />
 				</div>
 			</div>
 		</header>

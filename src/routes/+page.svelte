@@ -7,7 +7,7 @@
 	<title>CVForge - Open source resume builder</title>
 	<meta
 		name="description"
-		content="Build and export your resume as PDF or JSON. Data stored locally in your browser."
+		content="Build and export your resume as PDF, JSON, or YAML. Data stored locally in your browser."
 	/>
 </svelte:head>
 
@@ -21,8 +21,8 @@
 
 		<p class="mt-6 max-w-xl text-lg leading-relaxed text-zinc-600">
 			Privacy-focused and open source. Your resume is saved and encrypted on this device. PDF export
-			sends your resume to Gotenberg to create the file. JSON export happens entirely in your
-			browser.
+			sends your resume to Gotenberg to create the file. JSON and YAML export happen entirely in
+			your browser.
 		</p>
 
 		<div class="mt-10 flex flex-col items-center gap-4 sm:flex-row">
@@ -45,7 +45,7 @@
 			</li>
 			<li class="rounded-xl border border-zinc-100 bg-white p-5 shadow-md">
 				<h3 class="font-semibold text-zinc-900">Export formats</h3>
-				<p class="mt-1 leading-relaxed">Download PDF or JSON with one click.</p>
+				<p class="mt-1 leading-relaxed">Download PDF, JSON, or YAML from the Save as menu.</p>
 			</li>
 		</ul>
 	</main>

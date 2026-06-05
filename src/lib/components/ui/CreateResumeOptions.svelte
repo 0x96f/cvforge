@@ -2,7 +2,7 @@
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
-	import { clearResume, hasStoredResume, importResume, parseResumeJson } from '$lib';
+	import { clearResume, hasStoredResume, importResume, parseResumeFile } from '$lib';
 
 	let stored = $derived(browser ? hasStoredResume() : null);
 	let importError = $state(/** @type {string | null} */ (null));
@@ -38,9 +38,9 @@
 
 		try {
 			const text = await file.text();
-			const data = parseResumeJson(text);
+			const data = parseResumeFile(text, file.name);
 			if (!data) {
-				importError = 'Could not read that file. Upload a JSON export from CVForge.';
+				importError = 'Could not read that file. Upload a JSON or YAML export from CVForge.';
 				return;
 			}
 			await importResume(data);
@@ -63,7 +63,7 @@
 			</h1>
 			<p class="mt-2 text-zinc-600">
 				{stored
-					? 'Pick up where you left off, start fresh, or import a JSON file.'
+					? 'Pick up where you left off, start fresh, or import a JSON or YAML file.'
 					: 'Start with a blank form or import existing resume data.'}
 			</p>
 
@@ -102,9 +102,9 @@
 					disabled={importing}
 					class="rounded-xl border border-zinc-200 bg-white p-5 text-left transition hover:border-zinc-400 hover:bg-zinc-50 disabled:opacity-50"
 				>
-					<span class="block font-semibold text-zinc-900">Upload JSON</span>
+					<span class="block font-semibold text-zinc-900">Import file</span>
 					<span class="mt-1 block text-sm text-zinc-600"
-						>Import a CVForge JSON export to pre-fill the form.</span
+						>Import a CVForge JSON or YAML export to pre-fill the form.</span
 					>
 				</button>
 			</div>
@@ -116,7 +116,7 @@
 			<input
 				bind:this={fileInput}
 				type="file"
-				accept=".json,application/json"
+				accept=".json,.yaml,.yml,application/json,application/x-yaml,text/yaml"
 				class="sr-only"
 				onchange={handleFileChange}
 			/>

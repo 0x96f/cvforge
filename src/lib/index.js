@@ -10,7 +10,8 @@ export {
 	emptyEducation,
 	emptyProject,
 	emptyCertificate,
-	createDefaultResume
+	createDefaultResume,
+	mergeResumeData
 } from './utils/defaults.js';
 
 export {
@@ -30,9 +31,16 @@ export {
 	loadResume,
 	saveResume,
 	clearResume,
-	parseResumeJson,
 	importResume
 } from './utils/storage.js';
+
+export {
+	parseResumeJson,
+	parseResumeYaml,
+	parseResumeFile,
+	serializeResumeJson,
+	serializeResumeYaml
+} from './utils/serialization.js';
 
 export { renderResumeArticle } from './utils/render-html.js';
 export { exportResumePdf } from './utils/export-pdf.js';

@@ -1,3 +1,5 @@
+import { normalizeFontFamily } from './fonts.js';
+
 /** @typedef {import('./types.js').ResumeData} ResumeData */
 
 export const FEATURED_SKILL_COUNT = 6;
@@ -42,6 +44,20 @@ export function emptyProject() {
 
 export function emptyCertificate() {
 	return { id: newId(), name: '', date: '', description: '' };
+}
+
+/** @param {Partial<ResumeData>} parsed */
+export function mergeResumeData(parsed) {
+	const defaults = createDefaultResume();
+	return {
+		...defaults,
+		...parsed,
+		settings: {
+			...defaults.settings,
+			...parsed.settings,
+			fontFamily: normalizeFontFamily(parsed.settings?.fontFamily)
+		}
+	};
 }
 
 /** @returns {ResumeData} */

@@ -1,7 +1,6 @@
 import { DEK_STORAGE_KEY, STORAGE_KEY } from './consts.js';
 import { env } from '$env/dynamic/public';
-import { createDefaultResume } from './defaults.js';
-import { normalizeFontFamily } from './fonts.js';
+import { createDefaultResume, mergeResumeData } from './defaults.js';
 
 /** @typedef {import('./types.js').ResumeData} ResumeData */
 
@@ -167,20 +166,6 @@ function resetCachedDek() {
 
 // --- persistence ---
 
-/** @param {Partial<ResumeData>} parsed */
-function mergeResumeData(parsed) {
-	const defaults = createDefaultResume();
-	return {
-		...defaults,
-		...parsed,
-		settings: {
-			...defaults.settings,
-			...parsed.settings,
-			fontFamily: normalizeFontFamily(parsed.settings?.fontFamily)
-		}
-	};
-}
-
 export function hasStoredResume() {
 	if (typeof window === 'undefined') return false;
 	return localStorage.getItem(STORAGE_KEY) !== null;
@@ -212,17 +197,6 @@ export function clearResume() {
 	localStorage.removeItem(STORAGE_KEY);
 	localStorage.removeItem(DEK_STORAGE_KEY);
 	resetCachedDek();
-}
-
-/** @param {string} raw */
-export function parseResumeJson(raw) {
-	try {
-		const parsed = JSON.parse(raw);
-		if (!parsed || typeof parsed !== 'object') return null;
-		return mergeResumeData(parsed);
-	} catch {
-		return null;
-	}
 }
 
 /** @param {ResumeData} data */
