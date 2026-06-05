@@ -1,3 +1,4 @@
+import { orderedVisibleSections } from './defaults.js';
 import { fontFamilyStack } from './fonts.js';
 
 /** @typedef {import('./types.js').ResumeData} ResumeData */
@@ -300,7 +301,7 @@ export function renderResumeArticle(data) {
 		parts.push(`<p style="margin:1em 0">${esc(data.profile.objective.trim())}</p>`);
 	}
 
-	for (const config of data.sections.filter((s) => s.visible)) {
+	for (const config of orderedVisibleSections(data)) {
 		const render = RENDERERS[config.id];
 		if (render) {
 			parts.push(render(data, config, settings.themeColor));

@@ -15,6 +15,7 @@
 	import CustomSection from './sections/CustomSection.svelte';
 	import ResumeSettingsSection from './sections/ResumeSettingsSection.svelte';
 	import {
+		FORM_SECTION_ORDER,
 		clearResume,
 		createDefaultResume,
 		downloadBlob,
@@ -90,9 +91,22 @@
 	/** @param {SectionId} id @param {SectionConfig} config */
 	function updateSection(id, config) {
 		if (!data) return;
+		const prev = data.sections.find((s) => s.id === id);
+		const sections = data.sections.map((s) => (s.id === id ? config : s));
+		let sectionOrder = data.settings.sectionOrder;
+
+		if (prev && prev.visible !== config.visible) {
+			if (config.visible) {
+				sectionOrder = [...sectionOrder.filter((s) => s !== id), id];
+			} else {
+				sectionOrder = sectionOrder.filter((s) => s !== id);
+			}
+		}
+
 		data = {
 			...data,
-			sections: data.sections.map((s) => (s.id === id ? config : s))
+			sections,
+			settings: { ...data.settings, sectionOrder }
 		};
 	}
 
@@ -167,50 +181,51 @@
 
 				<ProfileSection profile={data.profile} {update} />
 
-				{#each data.sections as config (config.id)}
-					{#if config.id === 'work'}
+				{#each FORM_SECTION_ORDER as sectionId (sectionId)}
+					{@const config = data.sections.find((s) => s.id === sectionId)}
+					{#if config?.id === 'work'}
 						<WorkSection
 							work={data.work}
 							{config}
 							{update}
 							updateSection={(c) => updateSection('work', c)}
 						/>
-					{:else if config.id === 'education'}
+					{:else if config?.id === 'education'}
 						<EducationSection
 							education={data.education}
 							{config}
 							{update}
 							updateSection={(c) => updateSection('education', c)}
 						/>
-					{:else if config.id === 'projects'}
+					{:else if config?.id === 'projects'}
 						<ProjectsSection
 							projects={data.projects}
 							{config}
 							{update}
 							updateSection={(c) => updateSection('projects', c)}
 						/>
-					{:else if config.id === 'certificates'}
+					{:else if config?.id === 'certificates'}
 						<CertificatesSection
 							certificates={data.certificates}
 							{config}
 							{update}
 							updateSection={(c) => updateSection('certificates', c)}
 						/>
-					{:else if config.id === 'achievements'}
+					{:else if config?.id === 'achievements'}
 						<AchievementsSection
 							achievements={data.achievements}
 							{config}
 							{update}
 							updateSection={(c) => updateSection('achievements', c)}
 						/>
-					{:else if config.id === 'skills'}
+					{:else if config?.id === 'skills'}
 						<SkillsSection
 							skills={data.skills}
 							{config}
 							{update}
 							updateSection={(c) => updateSection('skills', c)}
 						/>
-					{:else if config.id === 'custom'}
+					{:else if config?.id === 'custom'}
 						<CustomSection
 							custom={data.custom}
 							{config}
@@ -220,7 +235,7 @@
 					{/if}
 				{/each}
 
-				<ResumeSettingsSection settings={data.settings} {updateSettings} />
+				<ResumeSettingsSection settings={data.settings} sections={data.sections} {updateSettings} />
 			</main>
 
 			<aside

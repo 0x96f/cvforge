@@ -31,6 +31,41 @@ export function defaultSections() {
 	];
 }
 
+/** @returns {import('./types.js').SectionId[]} */
+export function defaultSectionOrder() {
+	return defaultSections()
+		.filter((section) => section.visible)
+		.map((section) => section.id);
+}
+
+/** Fixed section order for the builder form. */
+export const FORM_SECTION_ORDER = defaultSections().map((section) => section.id);
+
+/** @param {import('./types.js').SectionId[] | undefined} sectionOrder @param {import('./types.js').SectionConfig[]} sections */
+function syncSectionOrder(sectionOrder, sections) {
+	const visibleIds = sections.filter((section) => section.visible).map((section) => section.id);
+	const visibleSet = new Set(visibleIds);
+	const known = new Set(FORM_SECTION_ORDER);
+
+	const ordered = (sectionOrder ?? []).filter((id) => known.has(id) && visibleSet.has(id));
+	const missing = visibleIds.filter((id) => !ordered.includes(id));
+	return [...ordered, ...missing];
+}
+
+/** @param {ResumeData} data @returns {import('./types.js').SectionConfig[]} */
+export function orderedVisibleSections(data) {
+	const byId = new Map(data.sections.map((section) => [section.id, section]));
+	/** @type {import('./types.js').SectionConfig[]} */
+	const ordered = [];
+
+	for (const id of data.settings.sectionOrder) {
+		const section = byId.get(id);
+		if (section?.visible) ordered.push(section);
+	}
+
+	return ordered;
+}
+
 export function emptyWork() {
 	return { id: newId(), company: '', website: '', title: '', date: '', bullets: [''] };
 }
@@ -63,15 +98,17 @@ function mergeSections(parsedSections) {
 /** @param {Partial<ResumeData>} parsed */
 export function mergeResumeData(parsed) {
 	const defaults = createDefaultResume();
+	const sections = mergeSections(parsed.sections);
 	return {
 		...defaults,
 		...parsed,
 		achievements: parsed.achievements ?? defaults.achievements,
-		sections: mergeSections(parsed.sections),
+		sections,
 		settings: {
 			...defaults.settings,
 			...parsed.settings,
-			fontFamily: normalizeFontFamily(parsed.settings?.fontFamily)
+			fontFamily: normalizeFontFamily(parsed.settings?.fontFamily),
+			sectionOrder: syncSectionOrder(parsed.settings?.sectionOrder, sections)
 		}
 	};
 }
@@ -104,7 +141,8 @@ export function createDefaultResume() {
 			themeColor: '#009090',
 			fontFamily: 'open-sans',
 			fontSize: 11,
-			pageSize: 'letter'
+			pageSize: 'letter',
+			sectionOrder: defaultSectionOrder()
 		}
 	};
 }

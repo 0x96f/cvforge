@@ -61,6 +61,7 @@
  * @property {FontFamily} fontFamily
  * @property {number} fontSize
  * @property {PageSize} pageSize
+ * @property {SectionId[]} sectionOrder
  *
  * @typedef {Object} ResumeData
  * @property {Profile} profile
