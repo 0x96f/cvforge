@@ -1,4 +1,4 @@
-FROM node:22-alpine AS base
+FROM node:24-alpine AS base
 
 FROM base AS deps
 RUN apk add --no-cache libc6-compat
@@ -13,7 +13,7 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-RUN corepack enable && corepack prepare pnpm@10.30.3 --activate && pnpm run build
+RUN corepack enable && corepack prepare pnpm@10 --activate && pnpm run build
 
 FROM base AS runner
 WORKDIR /app
