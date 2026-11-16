@@ -58,21 +58,28 @@ achievements:
     date: '2023'
     description: Presented "Designing for Shift Workers" at a regional product meetup.
 skills:
-  bullets:
-    - Figma, FigJam, prototyping, user interviews, usability testing, design systems, WCAG basics, HTML/CSS
-  featured:
-    - name: UX research
-      rating: 5
-    - name: Prototyping
-      rating: 5
-    - name: Design systems
-      rating: 4
-    - name: Facilitation
-      rating: 4
-    - name: Visual design
-      rating: 4
-    - name: Accessibility
-      rating: 3
+  categories:
+    - id: skills-design
+      name: Design
+      skills:
+        - Prototyping
+        - Visual design
+        - Design systems
+        - Accessibility
+        - WCAG basics
+    - id: skills-research
+      name: Research & Collaboration
+      skills:
+        - UX research
+        - User interviews
+        - Usability testing
+        - Facilitation
+    - id: skills-tools
+      name: Tools & Technologies
+      skills:
+        - Figma
+        - FigJam
+        - HTML/CSS
 custom:
   bullets:
     - 'Languages: English (native), Mandarin (conversational)'

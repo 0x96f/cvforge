@@ -1,4 +1,4 @@
-import { orderedVisibleSections } from './defaults.js';
+import { orderedVisibleSections, skillCategories } from './defaults.js';
 import { fontFamilyStack } from './fonts.js';
 
 /** @typedef {import('./types.js').ResumeData} ResumeData */
@@ -21,16 +21,20 @@ function contactFields(data) {
 		{ label: 'Email', value: data.profile.email },
 		{ label: 'Phone', value: data.profile.phone },
 		{ label: 'Website', value: data.profile.website },
-		{ label: 'Location', value: data.profile.location }
+		{ label: 'Location', value: data.profile.location },
+		{
+			label: 'GitHub',
+			value: data.profile.github ?? '',
+			urlPrefix: 'https://github.com/'
+		},
+		{
+			label: 'LinkedIn',
+			value: data.profile.linkedin ?? '',
+			urlPrefix: 'https://linkedin.com/in/'
+		}
 	]
 		.map((field) => ({ ...field, value: field.value.trim() }))
 		.filter((field) => field.value);
-}
-
-/** @param {number} rating */
-function dotRating(rating) {
-	const filled = Math.min(5, Math.max(0, Math.round(rating)));
-	return '●'.repeat(filled) + '○'.repeat(5 - filled);
 }
 
 /** @param {string} text */
@@ -54,12 +58,12 @@ const META_TEXT_STYLE = 'font-size:0.875em;font-style:italic;opacity:0.8';
 
 const META_LINE_STYLE = `margin:0.25em 0;${META_TEXT_STYLE};display:flex;justify-content:space-between;gap:1em;align-items:baseline`;
 
-/** @param {string} [website] */
-function metaLink(website) {
+/** @param {string} [website] @param {string} [label] */
+function metaLink(website, label) {
 	const websiteText = (website ?? '').trim();
 	if (!websiteText) return '';
 
-	return `<a href="${esc(formatHref(websiteText))}" style="color:inherit;text-decoration:none">${esc(websiteText)}</a>`;
+	return `<a href="${esc(formatHref(websiteText))}" style="color:inherit;text-decoration:none">${esc(label ?? websiteText)}</a>`;
 }
 
 /** @param {string} date @param {string} [website] */
@@ -119,13 +123,14 @@ function renderWork(data, config, themeColor) {
 				.map(esc)
 				.join(' - ');
 			const meta = workMetaLine(job.date, job.website);
+			const canSplit = flattenLines(job.bullets).length > 1;
 			const bullets = bulletItems(job.bullets, config.useBullets);
 			const bulletsBlock = bullets ? `<div style="margin-top:0.25em">${bullets}</div>` : '';
-			return `<article><h3 style="margin:0;font-weight:600">${header}</h3>${meta}${bulletsBlock}</article>`;
+			return `<article class="work-entry${canSplit ? ' work-entry--splittable' : ''}"><h3 style="margin:0;font-weight:600">${header}</h3>${meta}${bulletsBlock}</article>`;
 		})
 		.join('');
 
-	return `<section>${sectionHeading(config.title, themeColor)}<div style="display:flex;flex-direction:column;gap:1em">${articles}</div></section>`;
+	return `<section>${sectionHeading(config.title, themeColor)}<div class="work-entries" style="display:flex;flex-direction:column;gap:1em">${articles}</div></section>`;
 }
 
 /** @param {ResumeData} data @param {SectionConfig} config @param {string} themeColor */
@@ -206,46 +211,22 @@ function renderAchievements(data, config, themeColor) {
 	return renderNameDateDescriptionSection(entries, config, themeColor);
 }
 
-/** @param {string} title @param {string} themeColor */
-function columnHeading(title, themeColor) {
-	return `<h3 style="margin:0 0 0.5em;font-size:0.9em;font-weight:600;color:${esc(themeColor)}">${esc(title)}</h3>`;
-}
-
 /** @param {ResumeData} data @param {SectionConfig} config @param {string} themeColor */
 function renderSkills(data, config, themeColor) {
-	const featured = data.skills.featured.filter((s) => s.name.trim());
-	const items = flattenLines(data.skills.bullets);
-	if (!featured.length && !items.length) return '';
+	const categories = skillCategories(data.skills)
+		.map((category) => ({ ...category, items: flattenLines(category.skills) }))
+		.filter((category) => category.items.length);
+	if (!categories.length) return '';
 
-	const featuredHtml = featured.length
-		? `<div style="display:flex;flex-direction:column;gap:0.25em">${featured
-				.map(
-					(skill) =>
-						`<div style="display:flex;align-items:baseline;justify-content:space-between;gap:1em"><span>${esc(skill.name.trim())}</span><span style="flex-shrink:0;font-size:0.875em;letter-spacing:0.1em;opacity:0.7">${dotRating(skill.rating)}</span></div>`
-				)
-				.join('')}</div>`
-		: '';
-
-	const listHtml = items.length
-		? `<div style="display:flex;flex-direction:column;gap:0.25em">${items
-				.map((item) => `<p style="margin:0">${esc(item)}</p>`)
-				.join('')}</div>`
-		: '';
-
-	const columns = [];
-	if (featuredHtml) {
-		const heading = columnHeading('Featured', themeColor);
-		columns.push(`<div style="flex:1;min-width:0">${heading}${featuredHtml}</div>`);
-	}
-	if (listHtml) {
-		const heading = featuredHtml ? columnHeading('Other skills', themeColor) : '';
-		columns.push(`<div style="flex:1;min-width:0">${heading}${listHtml}</div>`);
-	}
-
-	const body =
-		columns.length === 2
-			? `<div style="display:flex;gap:2em;align-items:flex-start">${columns.join('')}</div>`
-			: columns.join('');
+	const body = categories
+		.map((category) => {
+			const name = category.name.trim();
+			const heading = name
+				? `<h3 style="margin:0 0 0.25em;font-size:1em;font-weight:600">${esc(name)}</h3>`
+				: '';
+			return `<article style="margin:0 0 0.75em">${heading}<p style="margin:0;overflow-wrap:anywhere">${category.items.map(esc).join(', ')}</p></article>`;
+		})
+		.join('');
 
 	return `<section>${sectionHeading(config.title, themeColor)}${body}</section>`;
 }
@@ -289,7 +270,7 @@ export function renderResumeArticle(data) {
 		const contactHtml = contact
 			.map(
 				(field) =>
-					`<div><span style="font-weight:600">${esc(field.label)}:</span> ${esc(field.value)}</div>`
+					`<div><span style="font-weight:600">${esc(field.label)}:</span> ${field.urlPrefix ? metaLink(field.urlPrefix + encodeURIComponent(field.value), field.urlPrefix.replace(/^https:\/\//, '') + encodeURIComponent(field.value)) : esc(field.value)}</div>`
 			)
 			.join('');
 		parts.push(

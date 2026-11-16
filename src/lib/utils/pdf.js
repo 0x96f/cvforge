@@ -32,9 +32,39 @@ function resumeToHtml(data) {
       break-after: avoid;
       page-break-after: avoid;
     }
-    article {
+    article article {
       break-inside: avoid;
       page-break-inside: avoid;
+    }
+    /* Use block flow so Chromium can paginate between experience bullets. */
+    .work-entries,
+    .work-entry > div > ul,
+    .work-entry > div > div {
+      display: block !important;
+    }
+    .work-entry + .work-entry { margin-top: 1em; }
+    .work-entry > div > ul > li + li { margin-top: 0.25em; }
+    .work-entry > div > div > p + p { margin-top: 0.5em !important; }
+    article.work-entry--splittable {
+      break-inside: auto;
+      page-break-inside: auto;
+    }
+    .work-entry li,
+    .work-entry > div > div > p {
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+    /* Keep the job heading and metadata with the first description item. */
+    .work-entry > h3,
+    .work-entry > p {
+      break-after: avoid;
+      page-break-after: avoid;
+    }
+    .work-entry > div,
+    .work-entry > div > :first-child,
+    .work-entry > div > :first-child > :first-child {
+      break-before: avoid;
+      page-break-before: avoid;
     }
   </style>
 </head>

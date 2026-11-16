@@ -57,5 +57,19 @@
 				onchange={(location) => update({ profile: { ...profile, location } })}
 			/>
 		</Field>
+		<Field label="GitHub username">
+			<TextInput
+				value={profile.github ?? ''}
+				onchange={(github) => update({ profile: { ...profile, github } })}
+				placeholder="username"
+			/>
+		</Field>
+		<Field label="LinkedIn username">
+			<TextInput
+				value={profile.linkedin ?? ''}
+				onchange={(linkedin) => update({ profile: { ...profile, linkedin } })}
+				placeholder="username"
+			/>
+		</Field>
 	</div>
 </section>

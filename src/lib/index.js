@@ -2,9 +2,9 @@ export * from './utils/consts.js';
 export * from './utils/download.js';
 
 export {
-	FEATURED_SKILL_COUNT,
 	newId,
-	emptyFeaturedSkills,
+	emptySkillCategory,
+	skillCategories,
 	defaultSections,
 	defaultSectionOrder,
 	FORM_SECTION_ORDER,

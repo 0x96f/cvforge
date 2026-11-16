@@ -76,16 +76,27 @@
 		}
 	],
 	"skills": {
-		"bullets": [
-			"Go, Python, PostgreSQL, Redis, Kafka, gRPC, Docker, Kubernetes, Terraform, Grafana"
-		],
-		"featured": [
-			{ "name": "Go", "rating": 5 },
-			{ "name": "PostgreSQL", "rating": 4 },
-			{ "name": "Kubernetes", "rating": 4 },
-			{ "name": "Python", "rating": 3 },
-			{ "name": "AWS", "rating": 4 },
-			{ "name": "System design", "rating": 4 }
+		"categories": [
+			{
+				"id": "skills-languages",
+				"name": "Languages",
+				"skills": ["Go", "Python"]
+			},
+			{
+				"id": "skills-data",
+				"name": "Databases & Messaging",
+				"skills": ["PostgreSQL", "Redis", "Kafka", "gRPC"]
+			},
+			{
+				"id": "skills-infrastructure",
+				"name": "Cloud & Infrastructure",
+				"skills": ["AWS", "Docker", "Kubernetes", "Terraform", "Grafana"]
+			},
+			{
+				"id": "skills-architecture",
+				"name": "Architecture",
+				"skills": ["System design"]
+			}
 		]
 	},
 	"custom": {
@@ -122,7 +133,12 @@
 			"visible": true,
 			"useBullets": false
 		},
-		{ "id": "skills", "title": "Skills", "visible": true, "useBullets": false },
+		{
+			"id": "skills",
+			"title": "Skills",
+			"visible": true,
+			"useBullets": false
+		},
 		{
 			"id": "custom",
 			"title": "Additional",

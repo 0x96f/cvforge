@@ -10,6 +10,8 @@
  * @property {string} phone
  * @property {string} website
  * @property {string} location
+ * @property {string} github
+ * @property {string} linkedin
  *
  * @typedef {Object} WorkEntry
  * @property {string} id
@@ -46,9 +48,10 @@
  * @property {string} date
  * @property {string} description
  *
- * @typedef {Object} FeaturedSkill
+ * @typedef {Object} SkillCategory
+ * @property {string} id
  * @property {string} name
- * @property {number} rating
+ * @property {string[]} skills
  *
  * @typedef {Object} SectionConfig
  * @property {SectionId} id
@@ -70,7 +73,7 @@
  * @property {ProjectEntry[]} projects
  * @property {CertificateEntry[]} certificates
  * @property {AchievementEntry[]} achievements
- * @property {{ bullets: string[], featured: FeaturedSkill[] }} skills
+ * @property {{ categories: SkillCategory[] }} skills
  * @property {{ bullets: string[] }} custom
  * @property {SectionConfig[]} sections
  * @property {ResumeSettings} settings

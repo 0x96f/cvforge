@@ -2,8 +2,6 @@ import { normalizeFontFamily } from './fonts.js';
 
 /** @typedef {import('./types.js').ResumeData} ResumeData */
 
-export const FEATURED_SKILL_COUNT = 6;
-
 export function newId() {
 	if (typeof crypto !== 'undefined' && crypto.randomUUID) {
 		return crypto.randomUUID();
@@ -11,11 +9,24 @@ export function newId() {
 	return `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
 }
 
-export function emptyFeaturedSkills() {
-	return Array.from({ length: FEATURED_SKILL_COUNT }, () => ({
-		name: '',
-		rating: 0
-	}));
+export function emptySkillCategory(name = '') {
+	return { id: newId(), name, skills: [''] };
+}
+
+/**
+ * @param {{ categories?: import('./types.js').SkillCategory[], featured?: { name: string }[], bullets?: string[] } | undefined} skills
+ * @returns {import('./types.js').SkillCategory[]}
+ */
+export function skillCategories(skills) {
+	if (Array.isArray(skills?.categories)) return skills.categories;
+	const categories = [];
+	const featured = (skills?.featured ?? [])
+		.map((skill) => skill.name)
+		.filter((name) => name.trim());
+	const other = (skills?.bullets ?? []).filter((line) => line.trim());
+	if (featured.length) categories.push({ ...emptySkillCategory('Core skills'), skills: featured });
+	if (other.length) categories.push({ ...emptySkillCategory('Other skills'), skills: other });
+	return categories.length ? categories : [emptySkillCategory()];
 }
 
 /** @returns {import('./types.js').SectionConfig[]} */
@@ -24,8 +35,18 @@ export function defaultSections() {
 		{ id: 'work', title: 'Work Experience', visible: true, useBullets: true },
 		{ id: 'education', title: 'Education', visible: true, useBullets: true },
 		{ id: 'projects', title: 'Projects', visible: true, useBullets: false },
-		{ id: 'certificates', title: 'Certificates', visible: true, useBullets: false },
-		{ id: 'achievements', title: 'Achievements', visible: true, useBullets: false },
+		{
+			id: 'certificates',
+			title: 'Certificates',
+			visible: true,
+			useBullets: false
+		},
+		{
+			id: 'achievements',
+			title: 'Achievements',
+			visible: true,
+			useBullets: false
+		},
 		{ id: 'skills', title: 'Skills', visible: true, useBullets: false },
 		{ id: 'custom', title: 'Additional', visible: false, useBullets: true }
 	];
@@ -67,11 +88,25 @@ export function orderedVisibleSections(data) {
 }
 
 export function emptyWork() {
-	return { id: newId(), company: '', website: '', title: '', date: '', bullets: [''] };
+	return {
+		id: newId(),
+		company: '',
+		website: '',
+		title: '',
+		date: '',
+		bullets: ['']
+	};
 }
 
 export function emptyEducation() {
-	return { id: newId(), school: '', date: '', degree: '', gpa: '', bullets: [] };
+	return {
+		id: newId(),
+		school: '',
+		date: '',
+		degree: '',
+		gpa: '',
+		bullets: []
+	};
 }
 
 export function emptyProject() {
@@ -102,6 +137,8 @@ export function mergeResumeData(parsed) {
 	return {
 		...defaults,
 		...parsed,
+		profile: { ...defaults.profile, ...parsed.profile },
+		skills: { categories: skillCategories(parsed.skills) },
 		achievements: parsed.achievements ?? defaults.achievements,
 		sections,
 		settings: {
@@ -122,7 +159,9 @@ export function createDefaultResume() {
 			email: '',
 			phone: '',
 			website: '',
-			location: ''
+			location: '',
+			github: '',
+			linkedin: ''
 		},
 		work: [emptyWork()],
 		education: [emptyEducation()],
@@ -130,8 +169,7 @@ export function createDefaultResume() {
 		certificates: [emptyCertificate()],
 		achievements: [emptyAchievement()],
 		skills: {
-			bullets: [''],
-			featured: emptyFeaturedSkills()
+			categories: [emptySkillCategory()]
 		},
 		custom: {
 			bullets: ['']
